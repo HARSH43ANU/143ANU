@@ -1,0 +1,89 @@
+<div class="recom-container">
+    <h3 class="recom">Recommended For You</h3>
+    <p class="recom-note">You might be happy to see this content, if it is already recommended, you may <button
+            onclick="loadRecomData()" style="color: blue; cursor: pointer;">refresh</button></p>
+    <div class="recom-content">
+        <div class="recom-background"></div>
+        <h2 id="recom-title"></h2>
+        <p>
+            Episode <span id="recom-episode"></span> |
+            Season <span id="recom-season"></span> |
+        </p>
+    </div>
+</div>
+
+<div class="recom-container">
+    <input type="text" placeholder="search">
+    <div id="searched-content"></div>
+<div>
+
+<style>
+    .recom-container {
+        padding: 12px;
+    }
+
+    .recom-content {
+        position: relative;
+    }
+
+    .recom-background {
+        top: 0;
+        left: 0;
+        position: absolute;
+        z-index: -999;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        -webkit-filter: blur(5px);
+        -moz-filter: blur(5px);
+        -o-filter: blur(5px);
+        -ms-filter: blur(5px);
+        filter: blur(5px);
+        background-color: black;
+    }
+
+    .recom-note button {
+        outline: none;
+        border: none;
+    }
+
+    .recom-container .recom,
+    .recom-container .recom-note {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .recom-container .recom-note {
+        font-weight: lighter;
+    }
+
+    .recom-container .recom-content {
+        padding: 18px;
+        margin-top: 20px;
+        border-radius: 12px;
+        font-family: 'Sofia';
+        color: white;
+        box-shadow: 0 0 5px black;
+        text-align: center;
+    }
+
+    .recom-container .recom-content:hover {
+        box-shadow: 0 0 10px black;
+    }
+</style>
+
+<script>
+    function loadRecomData() {
+        $.get('api/random_content', (res) => {
+            $('.recom-background').css({ 'background-image': `url(${res.img})` })
+            $("#recom-title").html(res.title);
+            $("#recom-episode").html(res.episode);
+            $("#recom-season").html(res.season);
+        })
+    }
+    loadRecomData();
+</script>
