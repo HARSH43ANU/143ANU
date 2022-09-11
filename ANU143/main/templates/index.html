@@ -1,0 +1,84 @@
+{% load static %}
+<html>
+    <head>
+        <title>143ANU</title>
+        <link rel="stylesheet" href="{% static 'index.css' %}">
+        <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+        <script src="{% static 'jquery.js' %}"></script>
+    </head>
+    <body>
+        <div id="main">
+            <div class="nav-bar">
+                <div class="nav-container">
+                    <div id="nav-title-top">143ANU</div>
+                    <div class="right-shift">
+                        <div class="nav-tab" onclick="loadHome()">Home</div>
+                        <div class="nav-tab" onclick="loadContentsPage()">Contents</div>
+                        <div class="nav-tab">Posts</div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div id="center-loader">
+                    <div class="loader"></div>
+                </div>
+                <div id="page">
+                </div>
+            </div>
+        </div>
+        <script>
+            function loadHome() {
+                $("#page").hide();
+                $("#center-loader").show();
+                $.get('/home', (res) => {
+                    $("#center-loader").hide();
+                    $('#page').html(res);
+                    $("#page").show();
+                    window.history.replaceState(null, null, "?page=home");
+                })
+            }
+
+            function loadContentsPage() {
+                $("#page").hide();
+                $("#center-loader").show();
+                $.get('/contents', (res) => {
+                    $("#center-loader").hide();
+                    $('#page').html(res);
+                    $("#page").show();
+                    window.history.replaceState(null, null, "?page=contents");
+                })
+            }
+
+            function loadRandomContentViewer() {
+                $("#page").hide();
+                $("#center-loader").show();
+                $.get('/random_content_viewer', (res) => {
+                    $("#center-loader").hide();
+                    $('#page').html(res);
+                    $("#page").show();
+                    window.history.replaceState(null, null, "?page=random_content_viewer");
+                })
+            }
+
+            const pages = {
+                'home': loadHome,
+                'contents': loadContentsPage,
+                'random_content_viewer': loadRandomContentViewer,
+            }
+
+            $(document).ready(()=> {
+                const params = new URLSearchParams(window.location.search)
+                if (params.has('page')) {
+                    let page = params.get('page');
+                    if (pages[page]) {
+                        pages[page]();
+                    } else {
+                        loadHome();
+                    }
+                } else {
+                    loadHome();
+                }
+            })
+        </script>
+    </body>
+</html>
